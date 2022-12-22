@@ -11,7 +11,7 @@ std::vector<float> getPlates(int weight, int bar){
     float weightWithoutBar = weight - bar;
     float weightOneSide = weightWithoutBar / 2;
     
-    //TODO rename bools to something better
+    //TODO: rename booleans to something better
     bool is45 = true;
     bool is25 = true;
     bool is10 = true;
@@ -80,6 +80,15 @@ int main(int argc, char *argv[]){
     int bar = atoi(argv[1]);
     int weight = atoi(argv[2]);
 
+    try {
+        if(bar <= 15 || weight <= bar)
+            throw "bad input";
+    }
+    catch(...){
+        std::cout << "In-valid\n";
+        return 1;
+    }
+    
     for(float elements : getPlates(weight,bar)){
         std::cout << elements << '\n';
     }
