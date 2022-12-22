@@ -1,16 +1,17 @@
+//Author: Thomas Curtis
+
 #include "iostream"
 #include "vector"
+#include "stdexcept"
+#include "limits"
 
-//Plate options, 45,25,10,5
 
-
-std::vector<float> getPlates(int weight, int bar, float plates[]){
+std::vector<float> getPlates(int weight, int bar){
 
     float weightWithoutBar = weight - bar;
     float weightOneSide = weightWithoutBar / 2;
-
-    float plateCalculation = weightOneSide;
-
+    
+    //TODO rename bools to something better
     bool is45 = true;
     bool is25 = true;
     bool is10 = true;
@@ -19,7 +20,7 @@ std::vector<float> getPlates(int weight, int bar, float plates[]){
 
     std::vector<float> sideBar;
 
-    while(plateCalculation != 0){
+    while(weightOneSide != 0){
 
         is45 = true;
         is25 = true;
@@ -27,68 +28,61 @@ std::vector<float> getPlates(int weight, int bar, float plates[]){
         is5 = true;
         is2_5 = true;
 
+        if(weightOneSide >= 45){
 
-        if(plateCalculation >= 45){
-            
             sideBar.push_back(45);
-            plateCalculation = plateCalculation - 45;
-
+            weightOneSide -= 45;
             is45 = false;
         }
 
-        if(plateCalculation >= 25 && is45){
+        if(weightOneSide >= 25 && is45){
+
             sideBar.push_back(25);
-            plateCalculation = plateCalculation - 25;
+            weightOneSide -= 25;
             is25 = false;
         }
 
-        if(plateCalculation >= 10 && is25 && is45 ){
+        if(weightOneSide >= 10 && is25 && is45 ){
+
             sideBar.push_back(10);
-            plateCalculation = plateCalculation - 10;
-
+            weightOneSide -= 10;
             is10 = false;
         }
 
-        if(plateCalculation >= 5 && is10 && is25 && is45){
+        if(weightOneSide >= 5 && is10 && is25 && is45){
+
             sideBar.push_back(5);
-            plateCalculation = plateCalculation - 5;
+            weightOneSide -= 5;
             is10 = false;
         }
 
-        if(plateCalculation >= 2.5 && is5 && is10 && is25 && is45){
+        if(weightOneSide >= 2.5 && is5 && is10 && is25 && is45){
+
             sideBar.push_back(2.5);
-            plateCalculation = plateCalculation - 2.5;
+            weightOneSide -= 2.5;
             is5 = false;
         }
         
-
-        if(plateCalculation < 2.5 && plateCalculation != 0){
-            std::cout << "Weight cant not be reached, off by " << plateCalculation << " pounds\n";
+        if(weightOneSide < 2.5 && weightOneSide != 0){
+            std::cout << "Weight cant not be exactly, off by " << weightOneSide << " pounds\n";
             return sideBar;
         }
 
-
     }
-    
-    
+     
     std::sort(sideBar.begin(), sideBar.end(), std::greater<int>());
     return sideBar;
 }
 
 
+int main(int argc, char *argv[]){
 
+    int bar = atoi(argv[1]);
+    int weight = atoi(argv[2]);
 
-int main(){
-
-    float plates[5] = {2.5,5,10,25,45};
-    int weight = 0;
-    int bar = 45;
-    std::cin >> weight;
-    
-    for(float elements: getPlates(weight,bar,plates)){
+    for(float elements : getPlates(weight,bar)){
         std::cout << elements << '\n';
     }
     
-
     return 0;
 }
