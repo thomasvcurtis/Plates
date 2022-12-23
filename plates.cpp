@@ -80,6 +80,7 @@ int main(int argc, char *argv[]){
     int bar = atoi(argv[1]);
     int weight = atoi(argv[2]);
 
+    //check for valid input
     try {
         if(bar <= 15 || weight <= bar)
             throw "bad input";
